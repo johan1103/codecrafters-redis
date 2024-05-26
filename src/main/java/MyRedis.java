@@ -14,7 +14,7 @@ public class MyRedis {
   }
   public byte[] request(String requestMessage){
     List<String> args = new ArrayList<>();
-    StringTokenizer st = new StringTokenizer(requestMessage, "\\rn");
+    StringTokenizer st = new StringTokenizer(requestMessage, "\r\n");
     String bulkStr=st.nextToken();
     int bulkSize=Integer.parseInt(bulkStr.substring(1,2));
     int commandLen = Integer.parseInt(st.nextToken().substring(1,2));
