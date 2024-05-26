@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,9 @@ public class Client {
     try (Socket socket = new Socket("127.0.0.1", 6379)) {
       logger.info("socket opened : "+socket.isConnected());
       InputStream input = socket.getInputStream();
+      OutputStream output = socket.getOutputStream();
+      String command = "PING\nPING";
+      output.write(command.getBytes(StandardCharsets.UTF_8));
       while (true){
         byte[] bytes = new byte[1024];
         int result = input.read(bytes);
