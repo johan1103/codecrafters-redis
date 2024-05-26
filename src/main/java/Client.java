@@ -14,17 +14,18 @@ public class Client {
       logger.info("socket opened : "+socket.isConnected());
       InputStream input = socket.getInputStream();
       OutputStream output = socket.getOutputStream();
-      String command = "PING\nPING";
-      output.write(command.getBytes(StandardCharsets.UTF_8));
-      while (true){
+      for(int i=0;i<1;i++) {
+        String command = "PING\nPING";
+        System.out.println("send pingping");
+        output.write(command.getBytes(StandardCharsets.UTF_8));
         byte[] bytes = new byte[1024];
         int result = input.read(bytes);
-        if(result==-1){
+        if (result == -1) {
           logger.info("server closed");
           break;
         }
-        String line = new String(bytes,0,result);
-        logger.info("read value : "+line);
+        String line = new String(bytes, 0, result);
+        logger.info("read value : " + line);
       }
     }catch (IOException e){
       logger.log(Level.INFO,"IOException : {}",e.getMessage());
