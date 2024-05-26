@@ -76,7 +76,7 @@ public class RedisNioServer {
     String message = byteListToString(byteMessage,StandardCharsets.UTF_8);
     byte[] responseMessage = redis.request(message);
     buffer.compact();
-    sc.register(this.selector, SelectionKey.OP_WRITE, appendRedisSuffix(responseMessage));
+    sc.register(this.selector, SelectionKey.OP_WRITE, responseMessage);
   }
   private void response(SelectionKey key)throws IOException{
     SocketChannel sc = (SocketChannel) key.channel();
@@ -99,15 +99,5 @@ public class RedisNioServer {
       i++;
     }
     return new String(array, charset);
-  }
-  private byte[] appendRedisSuffix(byte[] message){
-    byte[] result = new byte[message.length+3];
-    result[0]="+".getBytes(StandardCharsets.UTF_8)[0];
-    result[result.length-1]="\n".getBytes(StandardCharsets.UTF_8)[0];
-    result[result.length-2]="\r".getBytes(StandardCharsets.UTF_8)[0];
-    for(int i=0;i<message.length;i++){
-      result[1+i]=message[i];
-    }
-    return result;
   }
 }
