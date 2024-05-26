@@ -15,7 +15,7 @@ public class Client {
       InputStream input = socket.getInputStream();
       OutputStream output = socket.getOutputStream();
       for(int i=0;i<1;i++) {
-        String command = "PING\nPING";
+        String command = "ECHO hello";
         System.out.println("send pingping");
         output.write(command.getBytes(StandardCharsets.UTF_8));
         byte[] bytes = new byte[1024];

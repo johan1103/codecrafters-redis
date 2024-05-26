@@ -74,16 +74,16 @@ public class RedisNioServer {
       byteMessage.add(buffer.get());
     }
     String message = byteListToString(byteMessage,StandardCharsets.UTF_8);
-    String responseMessage = redis.request(message);
+    byte[] responseMessage = redis.request(message);
     buffer.compact();
-    sc.register(this.selector, SelectionKey.OP_WRITE, responseMessage);
+    sc.register(this.selector, SelectionKey.OP_WRITE, appendRedisSuffix(responseMessage));
   }
   private void response(SelectionKey key)throws IOException{
     SocketChannel sc = (SocketChannel) key.channel();
     // ByteBuffer를 생성한다.
     ByteBuffer writeBuffer = ByteBuffer.allocateDirect(64);
-    String response = (String)key.attachment();
-    writeBuffer.put(response.getBytes(StandardCharsets.UTF_8));
+    byte[] response = (byte[]) key.attachment();
+    writeBuffer.put(response);
     writeBuffer.flip();
     sc.write(writeBuffer);
     sc.register(this.selector,SelectionKey.OP_READ);
@@ -99,5 +99,15 @@ public class RedisNioServer {
       i++;
     }
     return new String(array, charset);
+  }
+  private byte[] appendRedisSuffix(byte[] message){
+    byte[] result = new byte[message.length+3];
+    result[0]="+".getBytes(StandardCharsets.UTF_8)[0];
+    result[result.length-1]="\n".getBytes(StandardCharsets.UTF_8)[0];
+    result[result.length-2]="\r".getBytes(StandardCharsets.UTF_8)[0];
+    for(int i=0;i<message.length;i++){
+      result[1+i]=message[i];
+    }
+    return result;
   }
 }
