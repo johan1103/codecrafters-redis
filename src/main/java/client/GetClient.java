@@ -1,8 +1,8 @@
 package client;
 
-public class EchoClient{
+public class GetClient {
   public static void main(String[] args) throws InterruptedException{
-    String command = "*2\r\n$4\r\nECHO\r\n$3\r\nhey\r\n";
+    String command = "*2\r\n$3\r\nGET\r\n$3\r\nfoo\r\n";
     Client client = new Client();
     client.executeQuery(command);
   }
