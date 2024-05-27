@@ -70,12 +70,12 @@ public class RedisNioServer {
       return;
     }
     buffer.flip();
-    while(buffer.hasRemaining()){
-      byteMessage.add(buffer.get());
-    }
-    String message = byteListToString(byteMessage,StandardCharsets.UTF_8);
-    byte[] responseMessage = redis.request(message);
+    byte[] outputData = new byte[buffer.remaining()];
+    buffer.get(outputData);
     buffer.compact();
+    buffer.clear();
+    String message = new String(outputData,StandardCharsets.UTF_8);
+    byte[] responseMessage = redis.request(message);
     sc.register(this.selector, SelectionKey.OP_WRITE, responseMessage);
   }
   private void response(SelectionKey key)throws IOException{
