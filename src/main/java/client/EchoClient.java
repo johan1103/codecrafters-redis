@@ -1,3 +1,5 @@
+package client;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -6,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Client {
-  private static final Logger logger = Logger.getLogger("Client");
+public class EchoClient {
+  private static final Logger logger = Logger.getLogger("client.Client");
   public static void main(String[] args) throws InterruptedException{
     int ticket = -1;
     try (Socket socket = new Socket("127.0.0.1", 6379)) {
